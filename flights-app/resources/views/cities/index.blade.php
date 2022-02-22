@@ -4,6 +4,12 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @if ($cities->count())
+                     
+                        <div class="index-header min-w-full divide-y divide-gray-200">
+                            <h2>Cities</h2>
+                            <a href="/cities/create" class="add-city-button">Create City</a>
+                        </div>
+                    
                         <table class="min-w-full divide-y divide-gray-200">
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($cities as $city)
