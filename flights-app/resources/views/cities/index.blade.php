@@ -3,13 +3,11 @@
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                    <div class="index-header border border-gray-200 p-6 rounded-xl">
+                        <h2>Cities</h2>
+                        <button href="/cities/create" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="create-city-modal">Create City</button>
+                    </div>
                     @if ($cities->count())
-                     
-                        <div class="index-header min-w-full divide-y divide-gray-200">
-                            <h2>Cities</h2>
-                            <a href="/cities/create" class="add-city-button">Create City</a>
-                        </div>
-                    
                         <table class="min-w-full divide-y divide-gray-200">
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($cities as $city)
@@ -45,4 +43,6 @@
     </div>
     </div>
     </div>
+@include ('cities._add-city-form')
+
 </x-layout>
