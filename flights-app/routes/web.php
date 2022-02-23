@@ -18,11 +18,13 @@ Route::get('/', function () {
 });
 
 Route::get('cities', [CityController::class, 'index']);
-
 Route::get('cities/table', [CityController::class, 'updatedTable']);
-
 Route::post('cities', [CityController::class, 'store']);
-
 Route::delete('cities/{city}', [CityController::class, 'delete']);
-
 Route::put('cities/{city}', [CityController::class, 'update']);
+
+Route::get('airlines', [AirlineController::class, 'index']);
+Route::get('airlines/table', [AirlineController::class, 'updatedTable']);
+Route::post('airlines', [AirlineController::class, 'store']);
+Route::delete('airlines/{airline}', [AirlineController::class, 'delete']);
+Route::put('airlines/{airline}', [AirlineController::class, 'update']);
