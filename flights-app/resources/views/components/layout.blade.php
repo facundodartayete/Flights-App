@@ -60,6 +60,8 @@
                 error,
             });
         };
+
+        const getQueryParams = () => window.location.href.split("?")[1] || "";
     </script>
 
     <div id="app">

@@ -20,29 +20,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        $("document").ready(() => {
-            $(".delete-city-form").submit(function (e) {
-                formRequest({
-                    e,
-                    form: $(this),
-                    success: () => {
-                        alert("city deleted successfully");
-                        $(this).closest(".city").remove();
-                    }
-                });
-            });
-
-            $(".edit-city").on("click", function () {
-                let city = $(this).closest(".city");
-                $("#edit-city-modal").trigger("activate", {
-                    cityId: city.data("city-id"),
-                    cityName: city.find(".city-name").html().trim(),
-                });
-            });
-        });
-    </script>
-
     @include ('cities._edit-city-form')
 </x-layout>

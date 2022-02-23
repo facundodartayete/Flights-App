@@ -19,6 +19,8 @@ Route::get('/', function () {
 
 Route::get('cities', [CityController::class, 'index']);
 
+Route::get('cities/table', [CityController::class, 'updatedTable']);
+
 Route::post('cities', [CityController::class, 'store']);
 
 Route::delete('cities/{city}', [CityController::class, 'delete']);
