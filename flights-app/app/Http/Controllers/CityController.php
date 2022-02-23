@@ -14,4 +14,27 @@ class CityController extends Controller
         ]);
     }
 
+    public function store()
+    {
+        City::create($this->validateCity());
+        return back();
+    }
+
+    protected function validateCity(?City $city = null): array
+    {
+        $city ??= new City();
+
+        return request()->validate([
+            'name' => ['required', Rule::unique('cities', 'name')->ignore($city)],
+        ]);
+    }
+
+    public function delete(City $city)
+    {
+        $city->delete();
+        return back();
+    }
+
+    
+
 }

@@ -17,4 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/cities', [CityController::class, 'index'])->name('cities');
+Route::get('cities', [CityController::class, 'index']);
+
+Route::post('cities', [CityController::class, 'store']);
+
+Route::delete('cities/{city}', [CityController::class, 'delete']);
