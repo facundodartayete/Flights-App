@@ -25,13 +25,20 @@
 
 <script>
     $("document").ready(() => {
-        $("#create-city-form").submit(function (e) {
+        $(document, "#create-city-form").submit(function (e) {
             formRequest({
                 e,
                 form: $(this),
                 success: () => {
-                    $(this).trigger("reset");
-                    aler("city created successfully");
+                    $.ajax({
+                        url: `/cities/table?${getQueryParams()}`,
+                        type: "GET",
+                        success: (response) => {
+                            $("#cities-table").replaceWith(response);
+                            $(this).trigger("reset");
+                            alert("city created successfully");
+                        },
+                    });
                 },
             });
         });
