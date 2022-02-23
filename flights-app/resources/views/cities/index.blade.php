@@ -13,95 +13,7 @@
                         Cities
                     </h2>
                     @include ('cities._add-city-form') @if ($cities->count())
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>Id</td>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>Name</td>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>Departures</td>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>Arrivals</td>
-                                    </div>
-                                </td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody
-                            id="cities"
-                            class="bg-white divide-y divide-gray-200"
-                        >
-                            @foreach ($cities as $city)
-                            <tr class="city">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>{{ $city->id }}</td>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div
-                                        class="text-sm font-medium text-gray-900"
-                                    >
-                                        <td>{{ $city->name }}</td>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>
-                                            {{ $city->flights_departing_count }}
-                                        </td>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium">
-                                        <td>
-                                            {{ $city->flights_arriving_count }}
-                                        </td>
-                                    </div>
-                                </td>
-
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                                >
-                                    <a
-                                        href="/cities/{{ $city->id }}/edit"
-                                        class="text-blue-500 hover:text-blue-600"
-                                        >Edit</a
-                                    >
-                                </td>
-
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                                >
-                                    <form
-                                        class="delete-city-form"
-                                        method="DELETE"
-                                        action="/cities/{{ $city->id }}"
-                                    >
-                                        @csrf @method('DELETE')
-                                        <button class="text-xs text-gray-400">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    @else
+                    @include ('cities._cities-table') @else
                     <p class="text-center">No cities yet.</p>
                     @endif
                 </div>
@@ -118,9 +30,19 @@
                     success: () => {
                         alert("city deleted successfully");
                         $(this).closest(".city").remove();
-                    },
+                    }
+                });
+            });
+
+            $(".edit-city").on("click", function () {
+                let city = $(this).closest(".city");
+                $("#edit-city-modal").trigger("activate", {
+                    cityId: city.data("city-id"),
+                    cityName: city.find(".city-name").html().trim(),
                 });
             });
         });
     </script>
+
+    @include ('cities._edit-city-form')
 </x-layout>

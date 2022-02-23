@@ -22,3 +22,5 @@ Route::get('cities', [CityController::class, 'index']);
 Route::post('cities', [CityController::class, 'store']);
 
 Route::delete('cities/{city}', [CityController::class, 'delete']);
+
+Route::put('cities/{city}', [CityController::class, 'update']);

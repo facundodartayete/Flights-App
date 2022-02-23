@@ -10,14 +10,21 @@ class CityController extends Controller
     public function index()
     {
         return view('cities.index', [
-            'cities' => City::withCount(['flights_arriving', 'flights_departing',])->get()
+            'cities' => City::withCount(['flights_arriving', 'flights_departing',])->paginate(10)
         ]);
     }
-
     public function store()
     {
         City::create($this->validateCity());
         return back();
+    }
+
+    public function update(City $city)
+    {
+        $cityRequest = $this->validateCity();
+        $city->name = $cityRequest['name'];
+        $city->save();
+        return $city;
     }
 
     protected function validateCity(?City $city = null): array
@@ -32,6 +39,6 @@ class CityController extends Controller
     public function delete(City $city)
     {
         $city->delete();
-        return back();
     }
+
 }
