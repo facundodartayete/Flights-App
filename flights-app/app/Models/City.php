@@ -13,4 +13,14 @@ class City extends Model
 
     protected $fillable = ['name', 'author'];
 
+    public function flights_arriving()
+    {
+        return $this->hasMany(Flight::class, 'destination_city_id');
+    }
+
+    public function flights_departing()
+    {
+        return $this->hasMany(Flight::class, 'origin_city_id');
+    }
+
 }

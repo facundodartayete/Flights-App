@@ -10,7 +10,7 @@ class CityController extends Controller
     public function index()
     {
         return view('cities.index', [
-            'cities' => City::all()
+            'cities' => City::withCount(['flights_arriving', 'flights_departing',])->get()
         ]);
     }
 
@@ -34,7 +34,4 @@ class CityController extends Controller
         $city->delete();
         return back();
     }
-
-    
-
 }
