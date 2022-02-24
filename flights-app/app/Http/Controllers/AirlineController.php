@@ -3,23 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Airline;
+use App\Models\City;
 use Illuminate\Validation\Rule;
 
 class AirlineController extends Controller
 {
     public function index()
     {
-        return view('airlines.index', [ ]);
-    }
-
-    public function updatedTable()
-    {
-        return ['airlines' => $this->getAirlines()];
+        return view('airlines.index', [
+            'cities' => City::orderBy('name')->get()
+        ]);
     }
 
     public function getAirlines()
     {
-        return Airline::withCount(['flights'])->paginate(10);
+        return Airline::with(['cities'])->withCount(['flights'])->paginate(10);
     }
 
     public function store()
@@ -29,9 +27,27 @@ class AirlineController extends Controller
 
     public function update(Airline $airline)
     {
-        $airlineRequest = $this->validateAirline();
+        $airlineRequest = $this->validateAirline($airline);
         $airline->name = $airlineRequest['name'];
         $airline->business_description = $airlineRequest['business_description'];
+
+        $cities = City::find($airlineRequest['city_ids']);
+        $airline->cities()->sync($cities);
+
+        $airline->save();
+        return ['airline' => $airline];
+    }
+
+    public function updateCities(Airline $airline)
+    {
+        $airlineRequest = request()->validate([
+            'city_ids' => 'array',
+            'city_ids.*' => 'int'
+        ]);
+
+        $cities = City::find($airlineRequest['city_ids']);
+        $airline->cities()->sync($cities);
+
         $airline->save();
         return ['airline' => $airline];
     }

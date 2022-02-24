@@ -30,6 +30,7 @@ return new class extends Migration
             $table->dateTime('departure_at');
             $table->dateTime('arrival_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

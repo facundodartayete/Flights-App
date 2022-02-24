@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Airline;
+use App\Models\AirlineCity;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\City;
@@ -26,8 +27,12 @@ class DatabaseSeeder extends Seeder
             for ($i = 0; $i < rand(0, 12); $i++) {
                 $airlineIndex = rand(0, count($airlines) - 1);
                 $destinationCityIndex = rand(0, count($cities) - 1);
-                //TODO: crear las airline_cities correspondientes
-
+                if (!AirlineCity::where(['airline_id' => $airlines[$airlineIndex]->id, 'city_id' => $city->id])->count()) {
+                    AirlineCity::factory()->create([
+                        'airline_id' => $airlines[$airlineIndex]->id,
+                        'city_id' => $city->id,
+                    ]);
+                }
                 Flight::factory()->create([
                     'airline_id' => $airlines[$airlineIndex]->id,
                     'origin_city_id' => $city->id,
