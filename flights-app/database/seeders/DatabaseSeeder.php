@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $cities = City::factory(20)->create();
-        $airlines = Airline::factory(10)->create();
+        $airlines = Airline::factory(40)->create();
 
         foreach ($cities as $city) {
             for ($i = 0; $i < rand(0, 12); $i++) {
