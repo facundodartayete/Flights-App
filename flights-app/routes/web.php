@@ -29,3 +29,4 @@ Route::get('/api/airlines', [AirlineController::class, 'getAirlines']);
 Route::post('airlines', [AirlineController::class, 'store']);
 Route::delete('airlines/{airline}', [AirlineController::class, 'delete']);
 Route::put('airlines/{airline}', [AirlineController::class, 'update']);
+Route::put('airlines/{airline}/cities', [AirlineController::class, 'updateCities']);

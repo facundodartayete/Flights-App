@@ -17,7 +17,7 @@ class AirlineController extends Controller
 
     public function getAirlines()
     {
-        return Airline::withCount(['flights'])->paginate(10);
+        return Airline::with(['cities'])->withCount(['flights'])->paginate(10);
     }
 
     public function store()
@@ -59,8 +59,6 @@ class AirlineController extends Controller
         return request()->validate([
             'name' => ['required', Rule::unique('airlines', 'name')->ignore($airline)],
             'business_description' => 'required',
-            /*     'city_ids' => 'array',
-            'city_ids.*' => 'int' */
         ]);
     }
 
