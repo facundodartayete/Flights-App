@@ -80,10 +80,15 @@
     $("document").ready(() => {
         $("#edit-airline-modal").on(
             "activate",
-            function (e, { airlineId, airlineName, airlineBusinessDescription }) {
+            function (
+                e,
+                { airlineId, airlineName, airlineBusinessDescription }
+            ) {
                 $(this).data("airline-id", airlineId);
                 $("#airline-edit-name").val(airlineName);
-                $("#airline-edit-business-description").val(airlineBusinessDescription);
+                $("#airline-edit-business-description").val(
+                    airlineBusinessDescription
+                );
                 $(this).removeClass("hidden");
                 $("#airline-edit-name").focus();
             }
@@ -100,14 +105,9 @@
                 form: $(this),
                 url: `/airlines/${airlineId}`,
                 success: (response) => {
-                    $.ajax({
-                        url: `/airlines/table?${getQueryParams()}`,
-                        type: "GET",
-                        success: (response) => {
-                            $("#edit-airline-modal").addClass("hidden");
-                            $(this).trigger("reset");
-                            $("#airlines-table").replaceWith(response);
-                        },
+                    updateTable(() => {
+                        $("#edit-airline-form").trigger("reset");
+                        $("#edit-airline-modal").addClass("hidden");
                     });
                 },
                 error: (error) => {

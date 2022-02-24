@@ -1,32 +1,16 @@
-<div id="airlines-table">
-    <table class="min-w-full divide-y divide-gray-200">
+<div id="airlines-table" class="table-wrapper">
+    <table class="table-auto">
         <thead>
             <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium">
-                        <td>Id</td>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium">
-                        <td>Name</td>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium">
-                        <td>Description</td>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium">
-                        <td>Flights</td>
-                    </div>
-                </td>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Description</td>
+                <td>Flights</td>
                 <td></td>
                 <td></td>
             </tr>
         </thead>
-        <tbody id="airlines" class="bg-white divide-y divide-gray-200">
+        <tbody id="airlines" >
             @foreach ($airlines as $airline) @include ('airlines._airline-row')
             @endforeach
         </tbody>
@@ -56,7 +40,10 @@
                 $("#edit-airline-modal").trigger("activate", {
                     airlineId: airline.data("airline-id"),
                     airlineName: airline.find(".airline-name").html().trim(),
-                    airlineBusinessDescription: airline.find(".airline-business-description").html().trim(),
+                    airlineBusinessDescription: airline
+                        .find(".airline-business-description")
+                        .html()
+                        .trim(),
                 });
             });
         });

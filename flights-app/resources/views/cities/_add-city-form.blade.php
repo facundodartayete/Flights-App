@@ -25,7 +25,7 @@
 
 <script>
     $("document").ready(() => {
-        $(document, "#create-city-form").submit(function (e) {
+        $("#create-city-form").submit(function (e) {
             formRequest({
                 e,
                 form: $(this),

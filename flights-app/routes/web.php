@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AirlineController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CityController;
 /*
@@ -24,7 +25,7 @@ Route::delete('cities/{city}', [CityController::class, 'delete']);
 Route::put('cities/{city}', [CityController::class, 'update']);
 
 Route::get('airlines', [AirlineController::class, 'index']);
-Route::get('airlines/table', [AirlineController::class, 'updatedTable']);
+Route::get('/api/airlines', [AirlineController::class, 'getAirlines']);
 Route::post('airlines', [AirlineController::class, 'store']);
 Route::delete('airlines/{airline}', [AirlineController::class, 'delete']);
 Route::put('airlines/{airline}', [AirlineController::class, 'update']);

@@ -12,8 +12,9 @@
                     >
                         Airlines
                     </h2>
-                    @include ('airlines._add-airline-form') @if ($airlines->count())
-                    @include ('airlines._airlines-table') @else
+                    @include ('airlines._add-airline-form')
+                    @if($airlines->count()) @include('airlines._airlines-table')
+                    @else
                     <p class="text-center">No airlines yet.</p>
                     @endif
                 </div>
@@ -21,4 +22,47 @@
         </div>
     </div>
     @include ('airlines._edit-airline-form')
+
+    <script>
+        const updateTable = (callback) => {
+            $.ajax({
+                url: `/api/airlines?${getQueryParams()}`,
+                type: "GET",
+                success: (response) => {
+                    const htmlRows = response.data.map(
+                        (airline) => `
+                    <tr class="airline" data-airline-id="${airline.id}">
+    <td>${airline.id}</td>
+
+    <td class="airline-name">
+        ${airline.name}
+    </td>
+
+    <td class="airline-business_description">
+        ${airline.business_description}
+    </td>
+    <td>
+        ${airline.flights_count}
+    </td>
+    <td>
+        <div class="edit-airline text-blue-500 hover:text-blue-600">Edit</div>
+    </td>
+    <td>
+        <form
+            class="delete-airline-form"
+            method="DELETE"
+            action="/airlines/${airline.id}"
+        >
+            <button class="text-xs text-gray-400">Delete</button>
+        </form>
+    </td>
+</tr>
+`
+                    );
+                    $("#airlines").html(htmlRows.join(""));
+                    callback(response);
+                },
+            });
+        };
+    </script>
 </x-layout>

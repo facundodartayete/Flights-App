@@ -18,8 +18,8 @@
     <div>
         <input
             type="text"
-            name="description"
-            id="description"
+            name="business_description"
+            id="business_description"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
             placeholder="Business description"
             required
@@ -34,20 +34,15 @@
 </form>
 
 <script>
-    $("document").ready(() => {
-        $(document, "#create-airline-form").submit(function (e) {
+    $(document).ready(() => {
+        $("#create-airline-form").submit(function (e) {
             formRequest({
                 e,
                 form: $(this),
                 success: () => {
-                    $.ajax({
-                        url: `/airlines/table?${getQueryParams()}`,
-                        type: "GET",
-                        success: (response) => {
-                            $("#airlines-table").replaceWith(response);
-                            $(this).trigger("reset");
-                            alert("airline created successfully");
-                        },
+                    updateTable(() => {
+                        $("#create-airline-form").trigger("reset");
+                        alert("airline created successfully");
                     });
                 },
             });

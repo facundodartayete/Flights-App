@@ -16,9 +16,7 @@ class AirlineController extends Controller
 
     public function updatedTable()
     {
-        return view('airlines._airlines-table', [
-            'airlines' => $this->getAirlines()
-        ])->render();
+        return ['airlines' => $this->getAirlines()];
     }
 
     public function getAirlines()
