@@ -10,32 +10,28 @@
                 <td></td>
             </tr>
         </thead>
-        <tbody id="airlines" >
-            @foreach ($airlines as $airline) @include ('airlines._airline-row')
+        <tbody id="airlines">
+            @foreach ($airlines as $airline)
+                @include ('airlines._airline-row')
             @endforeach
         </tbody>
     </table>
-    {{$airlines->links()}}
+    {{ $airlines->links() }}
 
     <script>
         $(document).ready(() => {
-            $(".delete-airline-form").submit(function (e) {
-                formRequest({
+            $(document).on('submit', ".delete-airline-form", function(e) {
+                fetchFormRequest({
                     e,
                     form: $(this),
-                    success: () => {
-                        $.ajax({
-                            url: `/airlines/table?${getQueryParams()}`,
-                            type: "GET",
-                            success: (response) => {
-                                $("#airlines-table").replaceWith(response);
-                            },
-                        });
-                    },
+                }).then(res => res.json()).then((data) => {
+                    updateTable();
+                }).catch((error) => {
+                    alert(error);
                 });
             });
 
-            $(".edit-airline").on("click", function () {
+            $(document).on("click", ".edit-airline", function() {
                 let airline = $(this).closest(".airline");
                 $("#edit-airline-modal").trigger("activate", {
                     airlineId: airline.data("airline-id"),

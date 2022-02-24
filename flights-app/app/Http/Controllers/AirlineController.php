@@ -21,13 +21,12 @@ class AirlineController extends Controller
 
     public function getAirlines()
     {
-        return  Airline::withCount(['flights'])->paginate(10);
+        return Airline::withCount(['flights'])->paginate(10);
     }
 
     public function store()
     {
-        Airline::create($this->validateAirline());
-        return back();
+        return Airline::create($this->validateAirline());
     }
 
     public function update(Airline $airline)
@@ -36,7 +35,7 @@ class AirlineController extends Controller
         $airline->name = $airlineRequest['name'];
         $airline->business_description = $airlineRequest['business_description'];
         $airline->save();
-        return $airline;
+        return ['airline' => $airline];
     }
 
     protected function validateAirline(?Airline $airline = null): array
@@ -52,5 +51,6 @@ class AirlineController extends Controller
     public function delete(Airline $airline)
     {
         $airline->delete();
+        return [];
     }
 }

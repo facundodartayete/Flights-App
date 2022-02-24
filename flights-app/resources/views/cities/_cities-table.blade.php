@@ -11,31 +11,26 @@
             </tr>
         </thead>
         <tbody id="cities">
-            @foreach ($cities as $city) @include ('cities._city-row')
+            @foreach ($cities as $city)
+                @include ('cities._city-row')
             @endforeach
         </tbody>
     </table>
-    {{$cities->links()}}
+    {{ $cities->links() }}
 
     <script>
         $(document).ready(() => {
-            $(".delete-city-form").submit(function (e) {
+            $(".delete-city-form").submit(function(e) {
                 formRequest({
                     e,
                     form: $(this),
                     success: () => {
-                        $.ajax({
-                            url: `/cities/table?${getQueryParams()}`,
-                            type: "GET",
-                            success: (response) => {
-                                $("#cities-table").replaceWith(response);
-                            },
-                        });
+                        updateTable();
                     },
                 });
             });
 
-            $(".edit-city").on("click", function () {
+            $(".edit-city").on("click", function() {
                 let city = $(this).closest(".city");
                 $("#edit-city-modal").trigger("activate", {
                     cityId: city.data("city-id"),

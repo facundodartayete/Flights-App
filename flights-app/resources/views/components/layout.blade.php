@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Flights App</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -37,7 +37,9 @@
 <body style="font-family: Open Sans, sans-serif">
     <script>
         $.ajaxSetup({
-            'X-CSRF-Token': @csrf 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
 
         const formRequest = ({
@@ -62,6 +64,33 @@
                 success,
                 error,
             });
+        };
+
+        const fetchFormRequest = async ({
+            e,
+            form,
+            url = form.attr("action"),
+            method = form.attr("method")
+        }) => {
+            e.preventDefault();
+            const data = form.serializeArray().reduce((obj, item) => {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                return response.json();
+            }else{
+                return response.json().then(error => { throw new Error(error.message) })
+            }
         };
 
         const getQueryParams = () => window.location.href.split("?")[1] || "";

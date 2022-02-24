@@ -62,20 +62,9 @@
                 form: $(this),
                 url: `/cities/${cityId}`,
                 success: (response) => {
-                    /*                     $("#edit-city-modal").addClass("hidden");
-                    $(this).trigger("reset");
-                    $(`.city[data-city-id="${cityId}"]`)
-                        .find(".city-name")
-                        .html(response.name);
- */
-                    $.ajax({
-                        url: `/cities/table?${getQueryParams()}`,
-                        type: "GET",
-                        success: (response) => {
-                            $("#edit-city-modal").addClass("hidden");
-                            $(this).trigger("reset");
-                            $("#cities-table").replaceWith(response);
-                        },
+                    updateTable((response) => {
+                        $(this).trigger("reset");
+                        $("#edit-city-modal").addClass("hidden");
                     });
                 },
                 error: (error) => {
