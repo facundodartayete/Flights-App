@@ -11,7 +11,7 @@ class City extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name', 'author'];
+    protected $fillable = ['name', ];
 
     public function flights_arriving()
     {

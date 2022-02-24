@@ -1,36 +1,20 @@
 <tr class="city" data-city-id="{{$city->id}}">
-    <td class="px-6 py-4 whitespace-nowrap">
-        <div class="text-sm font-medium">
-            <td>{{ $city->id }}</td>
-        </div>
+    <td>{{ $city->id }}</td>
+    <td class="city-name">
+        {{ $city->name }}
     </td>
-    <td class="px-6 py-4 whitespace-nowrap">
-        <div class="text-sm font-medium text-gray-900">
-            <td class="city-name">
-                {{ $city->name }}
-            </td>
-        </div>
+    <td>
+        {{ $city->flights_departing_count }}
     </td>
-    <td class="px-6 py-4 whitespace-nowrap">
-        <div class="text-sm font-medium">
-            <td>
-                {{ $city->flights_departing_count }}
-            </td>
-        </div>
-    </td>
-    <td class="px-6 py-4 whitespace-nowrap">
-        <div class="text-sm font-medium">
-            <td>
-                {{ $city->flights_arriving_count }}
-            </td>
-        </div>
+    <td>
+        {{ $city->flights_arriving_count }}
     </td>
 
-    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+    <td>
         <div class="edit-city text-blue-500 hover:text-blue-600">Edit</div>
     </td>
 
-    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+    <td>
         <form
             class="delete-city-form"
             method="DELETE"
