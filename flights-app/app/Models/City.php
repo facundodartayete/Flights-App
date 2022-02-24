@@ -23,4 +23,9 @@ class City extends Model
         return $this->hasMany(Flight::class, 'origin_city_id');
     }
 
+    public function airlines()
+    {
+        return $this->belongsToMany(Airline::class);
+    }
+
 }

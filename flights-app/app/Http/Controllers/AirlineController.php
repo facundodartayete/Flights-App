@@ -3,18 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Airline;
+use App\Models\City;
 use Illuminate\Validation\Rule;
 
 class AirlineController extends Controller
 {
     public function index()
     {
-        return view('airlines.index', [ ]);
-    }
-
-    public function updatedTable()
-    {
-        return ['airlines' => $this->getAirlines()];
+        return view('airlines.index', [
+            'cities' => City::orderBy('name')->get()
+        ]);
     }
 
     public function getAirlines()
@@ -29,9 +27,27 @@ class AirlineController extends Controller
 
     public function update(Airline $airline)
     {
-        $airlineRequest = $this->validateAirline();
+        $airlineRequest = $this->validateAirline($airline);
         $airline->name = $airlineRequest['name'];
         $airline->business_description = $airlineRequest['business_description'];
+
+        $cities = City::find($airlineRequest['city_ids']);
+        $airline->cities()->sync($cities);
+
+        $airline->save();
+        return ['airline' => $airline];
+    }
+
+    public function updateCities(Airline $airline)
+    {
+        $airlineRequest = request()->validate([
+            'city_ids' => 'array',
+            'city_ids.*' => 'int'
+        ]);
+
+        $cities = City::find($airlineRequest['city_ids']);
+        $airline->cities()->sync($cities);
+
         $airline->save();
         return ['airline' => $airline];
     }
@@ -43,6 +59,8 @@ class AirlineController extends Controller
         return request()->validate([
             'name' => ['required', Rule::unique('airlines', 'name')->ignore($airline)],
             'business_description' => 'required',
+            /*     'city_ids' => 'array',
+            'city_ids.*' => 'int' */
         ]);
     }
 

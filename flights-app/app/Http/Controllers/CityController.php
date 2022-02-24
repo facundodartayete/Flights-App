@@ -34,7 +34,7 @@ class CityController extends Controller
 
     public function update(City $city)
     {
-        $cityRequest = $this->validateCity();
+        $cityRequest = $this->validateCity($city);
         $city->name = $cityRequest['name'];
         $city->save();
         return $city;
