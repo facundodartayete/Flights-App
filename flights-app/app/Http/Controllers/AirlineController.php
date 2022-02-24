@@ -9,9 +9,7 @@ class AirlineController extends Controller
 {
     public function index()
     {
-        return view('airlines.index', [
-            'airlines' => $this->getAirlines()
-        ]);
+        return view('airlines.index', [ ]);
     }
 
     public function updatedTable()

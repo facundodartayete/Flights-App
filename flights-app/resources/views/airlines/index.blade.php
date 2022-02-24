@@ -7,11 +7,7 @@
                         Airlines
                     </h2>
                     @include ('airlines._add-airline-form')
-                    @if ($airlines->count())
-                        @include('airlines._airlines-table')
-                    @else
-                        <p class="text-center">No airlines yet.</p>
-                    @endif
+                    @include('airlines._airlines-table')
                 </div>
             </div>
         </div>
@@ -23,8 +19,19 @@
             fetch(`/api/airlines?${getQueryParams()}`)
                 .then(response => response.json())
                 .then(data => {
-                    const htmlRows = data.data.map(
-                        (airline) => `
+
+                    $("#airlines").html(getRowsHTML(data.data));
+
+                    updatePaginationData(data);
+
+                    callback(data);
+                });
+        };
+
+
+        const getRowsHTML = (rows) => {
+            const htmlRows = rows.map(
+                (airline) => `
                     <tr class="airline" data-airline-id="${airline.id}">
     <td>${airline.id}</td>
 
@@ -52,10 +59,33 @@
     </td>
 </tr>
 `
-                    );
-                    $("#airlines").html(htmlRows.join(""));
-                    callback(data);
-                });
+            );
+            return htmlRows.join("");
+        };
+
+        const updatePaginationData = (data) => {
+            let searchParams = new URLSearchParams(window.location.search);
+            const currentPage = searchParams.get('page') || 1;
+
+            const linksHTML = data.links.slice(1, -1).map((link) => {
+                    return {
+                        label: link.label,
+                        page: link?.url?.split('page=')[1] ?? ''
+                    }
+                }).map((link) =>
+                    `<span aria-current="page" data-page="${link.page}" class="table-nav-button">
+                            <span
+                                class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-pointer leading-5">${link.label}</span>
+                        </span>`, '')
+                .join('');
+            $('#page-buttons').html(linksHTML);
+            $('#table-from').html(data.from);
+            $('#table-to').html(data.to);
+            $('#table-total').html(data.total);
+
+            $('#table-previous').data('page', Math.max(1, +currentPage - 1));
+            $('#table-next').data('page', Math.min(data.last_page, +currentPage + 1));
+
         };
     </script>
 </x-layout>

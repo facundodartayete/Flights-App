@@ -74,7 +74,7 @@
                 e,
                 form: $(this),
                 url: `/airlines/${airlineId}`,
-            }).then(res => res.json()).then((data) => {
+            }).then((data) => {
                 updateTable();
                 $("#edit-airline-form").trigger("reset");
                 $("#edit-airline-modal").addClass("hidden");
