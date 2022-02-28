@@ -34,3 +34,4 @@ Route::put('airlines/{airline}', [AirlineController::class, 'update']);
 Route::put('airlines/{airline}/cities', [AirlineController::class, 'updateCities']);
 
 Route::get('flights', [FlightController::class, 'index']);
+Route::get('/api/flights', [FlightController::class, 'getFlights']);

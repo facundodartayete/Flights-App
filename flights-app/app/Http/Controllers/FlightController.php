@@ -14,7 +14,7 @@ class FlightController extends Controller
 
     public function getFlights()
     {
-        return Flight::with(['destination_city', 'origin_city_id', 'airline'])->paginate(10);
+        return Flight::with(['destination_city', 'origin_city', 'airline'])->paginate(10);
     }
 
     public function store()
