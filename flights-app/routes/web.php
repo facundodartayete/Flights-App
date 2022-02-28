@@ -3,6 +3,8 @@
 use App\Http\Controllers\AirlineController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\FlightController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,3 +32,5 @@ Route::post('airlines', [AirlineController::class, 'store']);
 Route::delete('airlines/{airline}', [AirlineController::class, 'delete']);
 Route::put('airlines/{airline}', [AirlineController::class, 'update']);
 Route::put('airlines/{airline}/cities', [AirlineController::class, 'updateCities']);
+
+Route::get('flights', [FlightController::class, 'index']);
