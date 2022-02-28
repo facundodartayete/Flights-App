@@ -5,9 +5,7 @@
                 <div class="card">
                     <div class="card-header">Example Component</div>
 
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
+                    <div class="card-body">{{ state.message }}</div>
                 </div>
             </div>
         </div>
@@ -15,9 +13,15 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
+import { reactive } from "vue";
+export default {
+
+    setup() {
+        const state = reactive({ message: "Holaaa" });
+
+        return {
+            state,
+        };
+    },
+};
 </script>
