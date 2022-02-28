@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Flight extends Model
 {
     use HasFactory;
+
+    public function destination_city()
+    {
+        return $this->belongsTo(City::class, 'destination_city_id');
+    }
+
+    public function origin_city()
+    {
+        return $this->belongsTo(City::class, 'origin_city_id');
+    }
+
+    public function airline()
+    {
+        return $this->belongsTo(Airline::class);
+    }
 }
