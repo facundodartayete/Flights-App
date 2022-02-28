@@ -33,11 +33,12 @@ class DatabaseSeeder extends Seeder
                         'city_id' => $city->id,
                     ]);
                 }
-                Flight::factory()->create([
-                    'airline_id' => $airlines[$airlineIndex]->id,
-                    'origin_city_id' => $city->id,
-                    'destination_city_id' => $cities[$destinationCityIndex]->id,
-                ]);
+                if ($city->id != $cities[$destinationCityIndex]->id)
+                    Flight::factory()->create([
+                        'airline_id' => $airlines[$airlineIndex]->id,
+                        'origin_city_id' => $city->id,
+                        'destination_city_id' => $cities[$destinationCityIndex]->id,
+                    ]);
             }
         }
     }
