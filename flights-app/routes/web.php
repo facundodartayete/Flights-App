@@ -27,11 +27,9 @@ Route::delete('cities/{city}', [CityController::class, 'delete']);
 Route::put('cities/{city}', [CityController::class, 'update']);
 
 Route::get('airlines', [AirlineController::class, 'index']);
-Route::get('/api/airlines', [AirlineController::class, 'getAirlines']);
 Route::post('airlines', [AirlineController::class, 'store']);
 Route::delete('airlines/{airline}', [AirlineController::class, 'delete']);
 Route::put('airlines/{airline}', [AirlineController::class, 'update']);
 Route::put('airlines/{airline}/cities', [AirlineController::class, 'updateCities']);
 
 Route::get('flights', [FlightController::class, 'index']);
-Route::get('/api/flights', [FlightController::class, 'getFlights']);
