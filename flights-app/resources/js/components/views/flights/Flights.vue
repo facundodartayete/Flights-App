@@ -165,9 +165,9 @@ export default {
             state.flightsData?.data?.map((flight) => {
                 return {
                     id: flight.id,
-                    airline: flight.airline.name,
-                    origin: flight.origin_city.name,
-                    destiny: flight.destination_city.name,
+                    airline: flight.airline?.name,
+                    origin: flight.origin_city?.name,
+                    destiny: flight.destination_city?.name,
                     departure_at: formatDate(flight.departure_at),
                     arrival_at: formatDate(flight.arrival_at),
                 };
