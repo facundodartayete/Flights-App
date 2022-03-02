@@ -1,7 +1,7 @@
 require("./bootstrap");
 
 import { createApp } from "vue";
-import Flights from "./components/Flights";
+import Flights from "./components/views/flights/Flights";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
@@ -10,6 +10,7 @@ const app = createApp({
         Flights,
     },
 });
+
 
 app.use(Toast, {
     position: "top-right",
