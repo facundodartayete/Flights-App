@@ -17,8 +17,17 @@ class AirlineController extends Controller
 
     public function getAirlines()
     {
-        return Airline::with(['cities'])->withCount(['flights'])->paginate(10);
+        if (request()->query('all', false))
+            return Airline::all();
+        else
+            return Airline::with(['cities'])->withCount(['flights'])->paginate(10);
     }
+
+    public function getAirlineCities(Airline $airline)
+    {
+        return $airline->cities;
+    }
+
 
     public function store()
     {
