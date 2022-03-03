@@ -29,8 +29,8 @@
 
         <FormDatetimeRange
             :name="'Dates'"
-            :start="state.flight.departure_at"
-            :end="state.flight.arrival_at"
+            :start="new Date(state.flight.departure_at)"
+            :end="new Date(state.flight.arrival_at)"
             @update="datesUpdate"
         ></FormDatetimeRange>
     </div>
@@ -55,18 +55,37 @@ export default {
     },
     props: ["flight", "url", "method"],
     setup(props, context) {
+        const getAirlineObj = () => {
+            if (state?.flight?.airline_id)
+                return state.airlines.find(
+                    (airline) => airline.id == state.flight.airline_id
+                );
+
+            return null;
+        };
+
+        const getCityObj = (id) => {
+            return state?.cities?.find((city) => city.id == id) || null;
+        };
+
+        const getOriginObj = () =>
+            getCityObj(state?.flight?.origin_city_id || 0);
+        const getDestinationObj = () =>
+            getCityObj(state?.flight?.destination_city_id || 0);
+
         const setFlightForm = () =>
             new Form({
-                airline: null,
+                airline: getAirlineObj(),
                 airline_id: 0,
-                origin: null,
+                origin: getOriginObj(),
                 origin_city_id: 0,
-                destination: null,
+                destination: getDestinationObj(),
                 destination_city_id: 0,
                 departure_at: "",
                 arrival_at: "",
                 ...props.flight,
             });
+
         const toast = useToast();
 
         const state = reactive({
@@ -89,10 +108,13 @@ export default {
         };
 
         const airlineSelected = (airline) => {
-            state.flight.airline_id = airline.id;
-            state.flight.airline = airline;
-
-            fetchAirlineCities(airline.id);
+            state.flight = new Form({
+                ...state.flight,
+                airline_id: airline.id,
+                airline: airline,
+                destination: null,
+                origin: null,
+            });
         };
 
         const originSelected = (city) => {
@@ -144,7 +166,7 @@ export default {
             const errors = [];
             if (!flight.airline_id) errors.push("Select an airline first");
 
-            if (!flight.origin_city_id || !flight.destination_city_id)
+            if (!flight.origin?.id || !flight.destination?.id)
                 errors.push("Select cities first");
 
             if (!flight.departure_at || !flight.arrival_at)
@@ -168,12 +190,26 @@ export default {
         );
 
         watch(
+            () => state?.flight?.airline,
+            (newValue) => {
+                if (newValue?.id) fetchAirlineCities(newValue.id);
+            }
+        );
+        watch(
             () => state?.airlines,
             () => {
-                if (state?.flight?.airline_id)
-                    state.flight.airline = state.airlines.find(
-                        (airline) => airline.id == state.flight.airline_id
-                    );
+                state.flight.airline = getAirlineObj();
+            }
+        );
+
+        watch(
+            () => state?.cities,
+            () => {
+                state.flight = new Form({
+                    ...state.flight,
+                    origin: getOriginObj(),
+                    destination: getDestinationObj(),
+                });
             }
         );
 

@@ -118,8 +118,9 @@ export default {
 
         const editFlightHandle = (flight) => {
             state.editModalActive = true;
-            state.editFlight = { ...flight };
-            console.log("flight1");
+            state.editFlight = state.flightsData.data.find(
+                (f) => f.id == flight.id
+            );
         };
 
         const deleteFlightHandle = (flight) => {
@@ -164,22 +165,18 @@ export default {
             }
         );
 
-        // watch(
-        //     () => state.editFlight,
-        //     () => {
-        //         console.log("flighttt1");
-        //     }
-        // );
         const editFlightSuccess = () => {
             state.editModalActive = false;
-            console.log("flight success");
             editModal.value?.closeModal();
+            fetchData();
+            toast.success("Flight Updated");
         };
 
         const addFlightSuccess = () => {
             state.addModalActive = false;
             toast.success("Flight Created");
             addModal.value?.closeModal();
+            fetchData();
         };
 
         const submitAddHandle = () => {
