@@ -20,7 +20,7 @@
 <script>
 import Datepicker from "vue3-date-time-picker";
 import "vue3-date-time-picker/dist/main.css";
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted, watch } from "vue";
 
 export default {
     components: { Datepicker },
@@ -32,10 +32,19 @@ export default {
         onMounted(() => {
             const startDate = start || "";
             const endDate = end || "";
-            date.value = ["", ""];
+            date.value = [startDate, endDate];
         });
 
-           const valueUpdated = (newDate) => {
+        watch(
+            () => props.start,
+            (newValue) => date.value = [props.start, props.end]
+        );
+         watch(
+            () => props.end,
+            (newValue) => date.value = [props.start, props.end]
+        );
+
+        const valueUpdated = (newDate) => {
             let [start, end] = newDate;
             start = moment(start).format("YYYY-MM-DD hh:mm:ss");
             end = moment(end).format("YYYY-MM-DD hh:mm:ss");
