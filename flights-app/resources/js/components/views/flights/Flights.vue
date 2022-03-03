@@ -65,6 +65,8 @@ import TableComponent from "../../table/TableComponent.vue";
 import TableNav from "../../table/TableNav.vue";
 import FlightsForm from "./FlightsForm.vue";
 import { useToast } from "vue-toastification";
+import { getRequest, deleteRequest } from "../../../api.js";
+import { flightEndpoints } from "../../../endpoints.js";
 
 export default {
     components: {
@@ -99,17 +101,7 @@ export default {
         const editModal = ref(null);
 
         const fetchData = () => {
-            fetch(`/api/flights?page=${state.page}`, {
-                method: "GET",
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                    accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            })
-                .then((response) => response.json())
+            getRequest(flightEndpoints.get() + `?page=${state.page}`)
                 .then((data) => (state.flightsData = data))
                 .catch((error) => console.log(error));
         };
@@ -126,7 +118,8 @@ export default {
 
         const editFlightHandle = (flight) => {
             state.editModalActive = true;
-            state.editFlight = flight;
+            state.editFlight = { ...flight };
+            console.log("flight1");
         };
 
         const deleteFlightHandle = (flight) => {
@@ -135,17 +128,7 @@ export default {
         };
 
         const deleteFlight = () => {
-            fetch(`/api/flights/${state.deleteFlight.id}`, {
-                method: "DELETE",
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                    accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            })
-                .then((response) => response.json())
+            deleteRequest(flightEndpoints.delete(state.deleteFlight.id))
                 .then((data) => {
                     toast.success("Flight deleted");
                     state.deleteModalActive = false;
@@ -181,12 +164,12 @@ export default {
             }
         );
 
-        watch(
-            () => state.editFlight,
-            () => {
-                console.log("flighttt1");
-            }
-        );
+        // watch(
+        //     () => state.editFlight,
+        //     () => {
+        //         console.log("flighttt1");
+        //     }
+        // );
         const editFlightSuccess = () => {
             state.editModalActive = false;
             console.log("flight success");

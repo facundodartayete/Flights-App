@@ -44,7 +44,8 @@ import Form from "../../form/Form.js";
 import FormDatetimeRange from "../../form/FormDatetimeRange.vue";
 import { reactive, onMounted, computed, watch } from "vue";
 import { useToast } from "vue-toastification";
-
+import { getRequest, deleteRequest } from "../../../api.js";
+import { airlineEndpoints } from "../../../endpoints.js";
 export default {
     components: {
         Modal,
@@ -62,11 +63,10 @@ export default {
                 origin_city_id: 0,
                 destination: null,
                 destination_city_id: 0,
-                departure_at: '',
-                arrival_at: '',
+                departure_at: "",
+                arrival_at: "",
                 ...props.flight,
             });
-        const { flight, url, method } = props;
         const toast = useToast();
 
         const state = reactive({
@@ -77,33 +77,13 @@ export default {
         });
 
         const fetchAirlines = () => {
-            fetch(`/api/airlines?all=1`, {
-                method: "GET",
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                    accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            })
-                .then((response) => response.json())
+            getRequest(airlineEndpoints.get() + `?all=1`)
                 .then((data) => (state.airlines = data))
                 .catch((error) => console.log(error));
         };
 
         const fetchAirlineCities = (airlineId) => {
-            fetch(`/api/airlines/${airlineId}/cities`, {
-                method: "GET",
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                    accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            })
-                .then((response) => response.json())
+            getRequest(airlineEndpoints.cities(airlineId))
                 .then((data) => (state.cities = data))
                 .catch((error) => console.log(error));
         };
@@ -139,21 +119,14 @@ export default {
         const datesUpdate = (dates) => {
             if (!dates) return;
             const [startDate, endDate] = dates;
-            //TODO: esto no tiene en cuenta timezones y me cambia el valor (le hace +4 a las horas)
-            state.flight.departure_at = startDate
-                .toISOString()
-                .slice(0, 19)
-                .replace("T", " ");
-            state.flight.arrival_at = endDate
-                .toISOString()
-                .slice(0, 19)
-                .replace("T", " ");
+            state.flight.departure_at = startDate;
+            state.flight.arrival_at = endDate;
         };
 
         const submitForm = () => {
             if (validateFlight()) {
                 state.flight
-                    .submit(method, url)
+                    .submit(props.method, props.url)
                     .then((data) => {
                         context.emit("success", data);
                     })

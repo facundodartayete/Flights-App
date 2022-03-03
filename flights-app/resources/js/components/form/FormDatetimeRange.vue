@@ -35,8 +35,11 @@ export default {
             date.value = ["", ""];
         });
 
-        const valueUpdated = (newDate) => {
-            context.emit("update", newDate);
+           const valueUpdated = (newDate) => {
+            let [start, end] = newDate;
+            start = moment(start).format("YYYY-MM-DD hh:mm:ss");
+            end = moment(end).format("YYYY-MM-DD hh:mm:ss");
+            context.emit("update", [start, end]);
         };
 
         return {
