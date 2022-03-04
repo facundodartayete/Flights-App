@@ -1,18 +1,55 @@
-<div id="airlines-table" class="table-wrapper">
-    <table class="table-auto">
-        <thead>
-            <tr>
-                <td>Id</td>
-                <td>Name</td>
-                <td>Description</td>
-                <td>Flights</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </thead>
-        <tbody id="airlines"></tbody>
-    </table>
+<div id="airlines-table">
+    <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="py-2 inline-block sm:px-6 lg:px-8">
+                <div class="overflow-hidden">
+                    <table class="table-fixed min-w-full">
+                        <thead class="bg-slate-100 border-b">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                >
+                                    Id
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                >
+                                    Name
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                >
+                                    Business Description
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                >
+                                    Flights
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                ></th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                ></th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-bold text-gray-900 px-6 py-4 text-left"
+                                ></th>
+                            </tr>
+                        </thead>
+                        <tbody id="airlines"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav
         role="navigation"
         aria-label="Pagination Navigation"
@@ -122,7 +159,10 @@
                 $("#edit-airline-modal").trigger("activate", {
                     airlineId: airline.data("airline-id"),
                     airlineName: airline.find(".airline-name").html().trim(),
-                    airlineBusinessDescription: airline.find(".airline-business-description").html().trim(),
+                    airlineBusinessDescription: airline
+                        .find(".airline-business-description")
+                        .html()
+                        .trim(),
                 });
             });
         });
@@ -147,22 +187,36 @@
                     }" data-cities="${encodeURIComponent(
                     JSON.stringify(airline.cities)
                 )}">
-    <td>${airline.id}</td>
-    <td class="airline-name"> ${airline.name}</td>
-    <td class="airline-business-description">${
-        airline.business_description
-    }</td>
-    <td>${airline.flights_count}</td>
-    <td><div class="edit-airline-cities text-blue-500 hover:text-blue-600">Edit Cities</div></td>
-    <td>
-        <td><div class="edit-airline text-blue-500 hover:text-blue-600">Edit</div></td>
-    <td>
+    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+        ${airline.id}
+    </td>
+    <td class="airline-name text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+        ${airline.name}
+    </td>
+    <td class="airline-business-description text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+        ${(airline.business_description.length > 120) ? airline.business_description.substr(0, 120-1) + '&hellip;' : airline.business_description}
+    </td>
+    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+        ${airline.flights_count}
+    </td>
+    <td
+        class="edit-airline-cities text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-indigo-600 font-bold cursor-pointer"
+    >
+    Edit Cities
+    </td>
+    <td
+        class="edit-airline text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-indigo-600 font-bold cursor-pointer"
+    >
+        Edit
+    </td>
+   
+    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-red-600 font-bold cursor-pointer">
         <form
             class="delete-airline-form"
             method="DELETE"
             action="/airlines/${airline.id}"
         >
-            <button class="text-xs text-gray-400">Delete</button>
+            <button class="text-xs ">Delete</button>
         </form>
     </td>
 </tr>
