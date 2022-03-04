@@ -168,7 +168,7 @@
         });
 
         const updateTable = (callback = () => {}) => {
-            fetch(`/api/airlines?${getQueryParams()}`)
+            fetch(`/airlines?${getQueryParams()}`)
                 .then((response) => response.json())
                 .then((data) => {
                     $("#airlines").html(getRowsHTML(data.data));

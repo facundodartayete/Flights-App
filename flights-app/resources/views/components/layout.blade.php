@@ -37,13 +37,13 @@
                             Welcome, Darta!
                         </button>
                     </x-slot>
-                    <x-dropdown-item href="/cities" :active="false">
+                    <x-dropdown-item href="/cities/index" :active="false">
                         Cities
                     </x-dropdown-item>
-                    <x-dropdown-item href="/airlines" :active="false">
+                    <x-dropdown-item href="/airlines/index" :active="false">
                         Airlines
                     </x-dropdown-item>
-                    <x-dropdown-item href="/flights" :active="false">
+                    <x-dropdown-item href="/flights/index" :active="false">
                         Flights
                     </x-dropdown-item>
                 </x-dropdown>
