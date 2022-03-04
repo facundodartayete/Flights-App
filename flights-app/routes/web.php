@@ -32,4 +32,3 @@ Route::delete('airlines/{airline}', [AirlineController::class, 'delete']);
 Route::put('airlines/{airline}', [AirlineController::class, 'update']);
 Route::put('airlines/{airline}/cities', [AirlineController::class, 'updateCities']);
 
-Route::get('flights', [FlightController::class, 'index']);

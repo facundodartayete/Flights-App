@@ -9,7 +9,7 @@
     >
         <template v-slot:content>
             <FlightsForm
-                :url="'/api/flights'"
+                :url="flightEndpoints.create()"
                 :method="'POST'"
                 @success="addFlightSuccess"
                 ref="addFlightFormRef"
@@ -38,7 +38,7 @@
         <template v-slot:button> <div></div></template>
         <template v-slot:content>
             <FlightsForm
-                :url="`/api/flights/${state.editFlight?.id}`"
+                :url="flightEndpoints.update(state.editFlight?.id)"
                 :method="'PUT'"
                 :flight="state.editFlight"
                 @success="editFlightSuccess"
