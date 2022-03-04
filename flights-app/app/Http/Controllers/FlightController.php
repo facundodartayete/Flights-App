@@ -27,13 +27,13 @@ class FlightController extends Controller
     public function update(Flight $flight)
     {
         $flightRequest = $this->validateFlight($flight);
-        $flight->airline_id = $flightRequest['airline_id'];
-        $flight->origin_city_id = $flightRequest['origin_city_id'];
-        $flight->destination_city_id = $flightRequest['destination_city_id'];
-        $flight->departure_at = $flightRequest['departure_at'];
-        $flight->arrival_at = $flightRequest['arrival_at'];
-        $flight->save();
-        return ['flight' => $flight];
+        return tap($flight)->update([
+            'airline_id' => $flightRequest['airline_id'],
+            'origin_city_id' => $flightRequest['origin_city_id'],
+            'destination_city_id' => $flightRequest['destination_city_id'],
+            'departure_at' => $flightRequest['departure_at'],
+            'arrival_at' => $flightRequest['arrival_at'],
+        ]);
     }
 
     protected function validateFlight(?Flight $flight = null): array
