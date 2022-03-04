@@ -201,6 +201,7 @@ export default {
             submitAddHandle,
             submitEditHandle,
             addModal,
+            flightEndpoints,
             editModal,
         };
     },
