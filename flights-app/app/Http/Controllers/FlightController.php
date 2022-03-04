@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Airline;
 use App\Models\Flight;
-use Exception;
+use Illuminate\Validation\ValidationException;
 
 class FlightController extends Controller
 {
+
     public function index()
     {
         return view('flights.index');
@@ -45,12 +47,18 @@ class FlightController extends Controller
             'arrival_at' => 'required|date',
         ]);
 
-        //TODO: exception types
         if ($requestArray['origin_city_id'] == $requestArray['destination_city_id'])
-            throw new Exception('Origin and Destination must be different cities');
+            throw ValidationException::withMessages(['origin_city_id' => 'Origin and Destination must be different cities']);
 
         if ($requestArray['departure_at'] >= $requestArray['arrival_at'])
-            throw new Exception('Arrival cannot happen bedore departure');
+            throw ValidationException::withMessages(['departure_at' => 'Arrival cannot happen bedore departure']);
+
+        $airline = Airline::find($requestArray['airline_id']);
+        if (!$airline->cities()->where('cities.id', $requestArray['origin_city_id'])->exists())
+            throw ValidationException::withMessages(['origin_city_id' => "{$airline->name} does not have a route to the selected city"]);
+
+        if (!$airline->cities()->where('cities.id', $requestArray['destination_city_id'])->exists())
+            throw ValidationException::withMessages(['origin_city_id' => "{$airline->name} does not have a route to the selected city"]);
 
         return $requestArray;
     }
