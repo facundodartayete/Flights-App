@@ -20,7 +20,7 @@ class FlightControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->flight = Flight::factory()->create();
+        $this->flight = Flight::factory()->newRandomRoute()->create();
         $this->factory = FlightRequestDataFactory::new()->withFlight($this->flight);
     }
 

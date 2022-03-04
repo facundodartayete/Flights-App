@@ -27,26 +27,9 @@ class DatabaseSeeder extends Seeder
             for ($i = 0; $i < rand(0, 12); $i++) {
                 $airlineIndex = rand(0, count($airlines) - 1);
                 $destinationCityIndex = rand(0, count($cities) - 1);
-                if (!AirlineCity::where(['airline_id' => $airlines[$airlineIndex]->id, 'city_id' => $city->id])->count()) {
-                    AirlineCity::factory()->create([
-                        'airline_id' => $airlines[$airlineIndex]->id,
-                        'city_id' => $city->id,
-                    ]);
-                }
-
+           
                 if ($city->id != $cities[$destinationCityIndex]->id) {
-                    if (!AirlineCity::where(['airline_id' => $airlines[$airlineIndex]->id, 'city_id' => $cities[$destinationCityIndex]->id])->count()) {
-                        AirlineCity::factory()->create([
-                            'airline_id' => $airlines[$airlineIndex]->id,
-                            'city_id' => $cities[$destinationCityIndex]->id,
-                        ]);
-                    }
-
-                    Flight::factory()->create([
-                        'airline_id' => $airlines[$airlineIndex]->id,
-                        'origin_city_id' => $city->id,
-                        'destination_city_id' => $cities[$destinationCityIndex]->id,
-                    ]);
+                    Flight::factory()->route($airlines[$airlineIndex], $city, $cities[$destinationCityIndex])->create();
                 }
             }
         }
