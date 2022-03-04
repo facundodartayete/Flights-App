@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\AirlineController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CityController;
-use App\Http\Controllers\FlightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +14,10 @@ use App\Http\Controllers\FlightController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/index', [CityController::class, 'index']);
+Route::get('/table', [CityController::class, 'updatedTable']);
+Route::post('/', [CityController::class, 'store']);
+Route::delete('/{city}', [CityController::class, 'delete']);
+Route::put('/{city}', [CityController::class, 'update']);
+
+

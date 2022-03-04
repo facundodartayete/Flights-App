@@ -19,12 +19,3 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('/airlines', [AirlineController::class, 'getAirlines']);
-Route::get('/airlines/{airline}/cities', [AirlineController::class, 'getAirlineCities']);
-
-
-Route::delete('/flights/{flight}', [FlightController::class, 'delete']);
-Route::get('/flights', [FlightController::class, 'getFlights']);
-Route::post('/flights', [FlightController::class, 'store']);
-Route::put('/flights/{flight}', [FlightController::class, 'update']);
