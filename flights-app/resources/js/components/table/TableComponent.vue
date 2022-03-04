@@ -27,15 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <TableRow
-                                v-for="(item, index) in items"
-                                :key="index"
-                                :item="item"
-                                :showEdit="showEdit"
-                                :showDelete="showDelete"
-                                @edit="editHandle"
-                                @delete="deleteHandle"
-                            ></TableRow>
+                           <slot></slot>
                         </tbody>
                     </table>
                 </div>

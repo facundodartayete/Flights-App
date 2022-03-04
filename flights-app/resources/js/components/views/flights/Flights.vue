@@ -23,30 +23,54 @@
         :columns="state.columns"
         :showEdit="true"
         :showDelete="true"
-        @edit="editFlightHandle"
-        @delete="deleteFlightHandle"
-    ></TableComponent>
-    <TableNav :data="state.flightsData" @page-change="pageChange"></TableNav>
-
-    <Modal
-        :title="'Edit Flight'"
-        :active="state.editModalActive"
-        @close="state.editModalActive = false"
-        @submit="submitEditHandle"
-        ref="editModal"
     >
-        <template v-slot:button> <div></div></template>
-        <template v-slot:content>
-            <FlightsForm
-                :url="flightEndpoints.update(state.editFlight?.id)"
-                :method="'PUT'"
-                :flight="state.editFlight"
-                @success="editFlightSuccess"
-                ref="editFlightFormRef"
-            >
-            </FlightsForm>
-        </template>
-    </Modal>
+        <TableRow
+            v-for="(flight, index) in state.flightsData?.data"
+            :key="index"
+        >
+            <TableCell :text="flight.id"> </TableCell>
+            <TableCell :text="flight.airline?.name"> </TableCell>
+            <TableCell :text="flight.origin_city?.name"> </TableCell>
+            <TableCell :text="flight.destination_city?.name"> </TableCell>
+            <TableCell :text="formatDate(flight.departure_at)"> </TableCell>
+            <TableCell :text="formatDate(flight.arrival_at)"> </TableCell>
+            <TableCell>
+                <Modal
+                    :title="`Edit Flight: ${flight.id}`"
+                    :active="state.editModalActive"
+                    @close="state.editModalActive = false"
+                    @submit="submitEditHandle(flight.id)"
+                    ref="editModal"
+                >
+                    <template v-slot:button>
+                        <div class="cursor-pointer font-bold text-indigo-600">
+                            Edit
+                        </div>
+                    </template>
+                    <template v-slot:content>
+                        <FlightsForm
+                            :url="flightEndpoints.update(flight.id)"
+                            :method="'PUT'"
+                            :flight="flight"
+                            @success="editFlightSuccess"
+                            :ref="
+                                (el) => {
+                                    editFlightFormRefs[
+                                        `editFlightFormRef-${flight.id}`
+                                    ].value = el;
+                                }
+                            "
+                        >
+                        </FlightsForm>
+                    </template>
+                </Modal>
+            </TableCell>
+            <TableCell>
+                <div class="cursor-pointer font-bold text-red-600">Delete</div>
+            </TableCell>
+        </TableRow>
+    </TableComponent>
+    <TableNav :data="state.flightsData" @page-change="pageChange"></TableNav>
     <Modal
         :title="'Are you sure you want to delete this flight?'"
         :active="state.deleteModalActive"
@@ -63,6 +87,8 @@ import { reactive, onMounted, computed, watch, ref } from "vue";
 import Modal from "../../Modal.vue";
 import TableComponent from "../../table/TableComponent.vue";
 import TableNav from "../../table/TableNav.vue";
+import TableRow from "../../table/TableRow.vue";
+import TableCell from "../../table/TableCell.vue";
 import FlightsForm from "./FlightsForm.vue";
 import { useToast } from "vue-toastification";
 import { getRequest, deleteRequest } from "../../../api.js";
@@ -74,6 +100,8 @@ export default {
         TableNav,
         FlightsForm,
         Modal,
+        TableCell,
+        TableRow,
     },
     setup() {
         const toast = useToast();
@@ -99,10 +127,17 @@ export default {
         const editFlightFormRef = ref(null);
         const addModal = ref(null);
         const editModal = ref(null);
+        const editFlightFormRefs = {};
 
         const fetchData = () => {
             getRequest(flightEndpoints.get() + `?page=${state.page}`)
-                .then((data) => (state.flightsData = data))
+                .then((data) => {
+                    state.flightsData = data;
+                    state.flightsData.data.forEach((flight) => {
+                        editFlightFormRefs[`editFlightFormRef-${flight.id}`] =
+                            ref(null);
+                    });
+                })
                 .catch((error) => console.log(error));
         };
 
@@ -114,18 +149,6 @@ export default {
             const dateObj = new Date(date);
             const timeStr = dateObj.toTimeString().split(" ")[0];
             return `${dateObj.toLocaleDateString()} ${timeStr}`;
-        };
-
-        const editFlightHandle = (flight) => {
-            state.editModalActive = true;
-            state.editFlight = state.flightsData.data.find(
-                (f) => f.id == flight.id
-            );
-        };
-
-        const deleteFlightHandle = (flight) => {
-            state.deleteModalActive = true;
-            state.deleteFlight = flight;
         };
 
         const deleteFlight = () => {
@@ -183,15 +206,17 @@ export default {
             addFlightFormRef.value?.submitForm();
         };
 
-        const submitEditHandle = () => {
-            editFlightFormRef.value?.submitForm();
+        const submitEditHandle = (id) => {
+            // console.log(id);
+            // console.log(Object.keys(editFlightFormRefs));
+            console.log(editFlightFormRefs[`editFlightFormRef-${id}`]);
+            console.log(editFlightFormRefs[`editFlightFormRef-${id}`]?.value);
+            editFlightFormRefs[`editFlightFormRef-${id}`].value?.submitForm();
         };
 
         return {
             state,
             flightRows,
-            editFlightHandle,
-            deleteFlightHandle,
             deleteFlight,
             pageChange,
             editFlightSuccess,
@@ -203,6 +228,8 @@ export default {
             addModal,
             flightEndpoints,
             editModal,
+            formatDate,
+            editFlightFormRefs,
         };
     },
 };
