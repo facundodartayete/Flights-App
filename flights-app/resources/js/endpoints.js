@@ -1,15 +1,15 @@
 const flightEndpoints = {
-    get: (id = 0) => `/api/flights${id ? `/${id}` : ""}`,
-    create: () => "/api/flights",
-    update: (id) => `/api/flights/${id}`,
-    delete: (id) => `/api/flights/${id}`,
+    get: (id = 0) => `/flights${id ? `/${id}` : ""}`,
+    create: () => "/flights",
+    update: (id) => `/flights/${id}`,
+    delete: (id) => `/flights/${id}`,
 };
 const cityEndpoints = {};
 const airlineEndpoints = {
-    get: (id = 0) => `/api/airlines${id ? `/${id}` : ""}`,
-    create: () => "/api/airlines",
-    update: (id) => `/api/airlines/${id}`,
-    delete: (id) => `/api/airlines/${id}`,
-    cities: (id) => `/api/airlines/${id}/cities`,
+    get: (id = 0) => `/airlines${id ? `/${id}` : ""}`,
+    create: () => "/airlines",
+    update: (id) => `/airlines/${id}`,
+    delete: (id) => `/airlines/${id}`,
+    cities: (id) => `/airlines/${id}/cities`,
 };
 export { flightEndpoints, cityEndpoints, airlineEndpoints };
