@@ -19,6 +19,7 @@ class CityController extends Controller
         return view('cities._cities-table', [
             'cities' => $this->getCities()
         ])->render();
+
     }
 
     public function getCities()
@@ -28,8 +29,7 @@ class CityController extends Controller
 
     public function store()
     {
-        City::create($this->validateCity());
-        return back();
+        return City::create($this->validateCity());
     }
 
     public function update(City $city)
