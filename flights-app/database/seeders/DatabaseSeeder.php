@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Airline;
-use App\Models\AirlineCity;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\City;
@@ -20,18 +19,21 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        $cities = City::factory(20)->create();
-        $airlines = Airline::factory(40)->create();
+        $airlines = Airline::factory(20)
+            ->has(City::factory()->count(5))
+            ->create();
 
-        foreach ($cities as $city) {
-            for ($i = 0; $i < rand(0, 12); $i++) {
-                $airlineIndex = rand(0, count($airlines) - 1);
-                $destinationCityIndex = rand(0, count($cities) - 1);
-           
-                if ($city->id != $cities[$destinationCityIndex]->id) {
-                    Flight::factory()->route($airlines[$airlineIndex], $city, $cities[$destinationCityIndex])->create();
-                }
-            }
+        for ($i = 0; $i < rand(40, 100); $i++) {
+            $airline = $airlines->random();
+            $cities = $airline->cities()->get();
+            $origin = $cities->random();
+            $destination = collect($cities)->where('id', '!=',  $origin->id)->random();
+            if ($origin->id != $destination->id)
+                Flight::factory()->create([
+                    'airline_id' => $airline->id,
+                    'origin_city_id' => $origin->id,
+                    'destination_city_id' => $destination->id,
+                ]);
         }
     }
 }
