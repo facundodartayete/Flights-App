@@ -22,58 +22,23 @@ class FlightFactory extends Factory
         $departureAt =  $this->faker->dateTimeBetween('+0 days', '+1 years');
 
         return [
+            'airline_id' => Airline::factory(),
+            'origin_city_id' => City::factory(),
+            'destination_city_id' => City::factory(),
             'departure_at' => $departureAt,
             'arrival_at' =>  $this->faker->dateTimeBetween($departureAt, strtotime('+12 hours', $departureAt->format('U'))),
         ];
     }
 
-    public function route($airline, $origin, $destination)
-    {
-        if (!AirlineCity::where(['airline_id' => $airline->id, 'city_id' => $origin->id])->count()) {
-            AirlineCity::factory()->create([
-                'airline_id' => $airline->id,
-                'city_id' => $origin->id,
-            ]);
-        }
-        if (!AirlineCity::where(['airline_id' => $airline->id, 'city_id' => $destination->id])->count()) {
-            AirlineCity::factory()->create([
-                'airline_id' => $airline->id,
-                'city_id' => $destination->id,
-            ]);
-        }
-
-        return $this->state(function ($attributes) use ($airline, $origin, $destination) {
-            return [
-                'airline_id' => $airline->id,
-                'origin_city_id' => $origin->id,
-                'destination_city_id' => $destination->id,
-            ];
-        });
-    }
 
     public function newRandomRoute()
     {
-        $airline = Airline::factory()->create();
-        $cities = City::factory(2)->create();
-        $origin = $cities[0];
-        $destination = $cities[1];
-
-        AirlineCity::factory()->create([
-            'airline_id' => $airline->id,
-            'city_id' => $origin->id,
-        ]);
-        AirlineCity::factory()->create([
-            'airline_id' => $airline->id,
-            'city_id' => $destination->id,
-        ]);
-        AirlineCity::factory()->create([
-            'airline_id' => $airline->id,
-            'city_id' => $origin->id,
-        ]);
-        AirlineCity::factory()->create([
-            'airline_id' => $airline->id,
-            'city_id' => $destination->id,
-        ]);
+        $airline = Airline::factory()
+            ->has(City::factory()->count(5))
+            ->create();
+        $cities = $airline->cities()->get();
+        $origin = $cities->random();
+        $destination = collect($cities)->where('id', '!=',  $origin->id)->random();
 
         return $this->state(function ($attributes) use ($airline, $origin, $destination) {
             return [
